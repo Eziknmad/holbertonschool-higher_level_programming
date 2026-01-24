@@ -42,3 +42,21 @@ Test with two floats:
 Test with negative floats:
     >>> add_integer(-5.5, -4.5)
     -9
+
+Test with float infinity:
+    >>> add_integer(float('inf'))
+    Traceback (most recent call last):
+    ...
+    OverflowError: cannot convert float infinity to integer
+
+Test with negative float infinity:
+    >>> add_integer(float('-inf'), 5)
+    Traceback (most recent call last):
+    ...
+    OverflowError: cannot convert float infinity to integer
+
+Test with NaN:
+    >>> add_integer(float('nan'))
+    Traceback (most recent call last):
+    ...
+    ValueError: cannot convert float NaN to integer
