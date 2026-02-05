@@ -19,6 +19,10 @@ ValueError: age must be greater than 0
 Traceback (most recent call last):
 TypeError: age must be an integer
 
+>>> bg.integer_validator("age", 1.2)
+Traceback (most recent call last):
+TypeError: age must be an integer
+
 >>> bg.integer_validator("age", (4,))
 Traceback (most recent call last):
 TypeError: age must be an integer
@@ -28,6 +32,10 @@ Traceback (most recent call last):
 TypeError: age must be an integer
 
 >>> bg.integer_validator("age", {3, 4})
+Traceback (most recent call last):
+TypeError: age must be an integer
+
+>>> bg.integer_validator("age", {"a": 1})
 Traceback (most recent call last):
 TypeError: age must be an integer
 
