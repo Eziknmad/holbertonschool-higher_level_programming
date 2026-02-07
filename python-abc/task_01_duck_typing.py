@@ -37,7 +37,7 @@ class Circle(Shape):
         """
         Initialize a circle with a given radius.
         """
-        self.radius = radius
+        self.radius = abs(radius)
 
     def area(self):
         """
@@ -50,7 +50,6 @@ class Circle(Shape):
         Return the perimeter of the circle.
         """
         return 2 * math.pi * self.radius
-
 
 class Rectangle(Shape):
     """
