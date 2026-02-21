@@ -1,0 +1,47 @@
+Basics of HTTP/HTTPS
+1. HTTP vs HTTPS: Key Differences
+HTTP (Hypertext Transfer Protocol) and HTTPS (HTTP Secure) are both protocols for transferring data over the web. The core differences come down to security:
+HTTP transmits data in plain text, meaning anyone intercepting the traffic (via a man-in-the-middle attack or packet sniffing) can read the contents directly. HTTPS wraps HTTP inside SSL/TLS encryption, so intercepted data appears as unintelligible ciphertext. HTTPS also uses digital certificates issued by Certificate Authorities (CAs) to verify the identity of the server, protecting against impersonation. HTTP runs on port 80 by default, while HTTPS runs on port 443. Modern browsers flag HTTP sites as "Not Secure," and search engines like Google give ranking preference to HTTPS sites.
+In short: HTTP is fast and simple but unsafe for sensitive data. HTTPS is HTTP with a security layer that ensures confidentiality, integrity, and authentication.
+
+2. Structure of an HTTP Request and Response
+HTTP Request:
+GET /index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0
+Accept: text/html
+Accept-Language: en-US
+Connection: keep-alive
+Structure breakdown:
+
+Request Line: Method + Path + HTTP Version (GET /index.html HTTP/1.1)
+Headers: Key-value pairs providing metadata (Host, User-Agent, Accept, etc.)
+Blank Line: Separates headers from the body
+Body (optional): Data sent with the request (used in POST/PUT)
+
+HTTP Response:
+HTTP/1.1 200 OK
+Date: Wed, 18 Feb 2026 12:00:00 GMT
+Server: Apache/2.4
+Content-Type: text/html; charset=UTF-8
+Content-Length: 1523
+
+<html>
+  <body>...</body>
+</html>
+Structure breakdown:
+
+Status Line: HTTP Version + Status Code + Reason Phrase (HTTP/1.1 200 OK)
+Headers: Metadata about the response (Content-Type, Content-Length, Date, etc.)
+Blank Line: Separates headers from the body
+Body: The actual content returned (HTML, JSON, image data, etc.)
+
+
+3. Common HTTP Methods
+MethodDescriptionUse CaseGETRetrieves data from the server without modifying anythingFetching a webpage, querying an API for a list of usersPOSTSends data to the server to create a new resourceSubmitting a registration form, creating a new database entryPUTSends data to update or replace an existing resource entirelyUpdating a user's full profile informationPATCHPartially updates an existing resourceChanging only a user's email address without touching other fieldsDELETERemoves a specified resource from the serverDeleting a user account or removing a blog postHEADSame as GET but returns only headers, no bodyChecking if a resource exists or verifying its size before downloadingOPTIONSDescribes the communication options available for a resourceUsed by browsers in CORS preflight checks to see what methods a server allows
+
+4. Common HTTP Status Codes
+Status CodeNameDescriptionScenario200OKThe request succeeded and the server returned the requested dataA GET request to an API returns a list of users successfully201CreatedThe request succeeded and a new resource was createdA POST request creates a new user account in the database301Moved PermanentlyThe resource has been permanently moved to a new URLA website migrates from HTTP to HTTPS and redirects all old URLs400Bad RequestThe server couldn't understand the request due to malformed syntaxA client sends a JSON body with a missing required field401UnauthorizedAuthentication is required and has failed or not been providedA user tries to access a protected API endpoint without a valid token403ForbiddenThe server understood the request but refuses to authorize itA regular user tries to access an admin-only endpoint404Not FoundThe requested resource could not be found on the serverA user navigates to a page that has been deleted or never existed500Internal Server ErrorThe server encountered an unexpected condition that prevented fulfillmentA bug in the server-side code causes a crash when processing a request503Service UnavailableThe server is temporarily unable to handle the requestThe server is down for maintenance or overwhelmed by traffic
+
+Summary
+HTTP is the backbone of web communication, defining how clients and servers exchange information through structured requests and responses. HTTPS adds the critical security layer needed for any site handling sensitive data. Understanding methods like GET, POST, PUT, and DELETE tells you what a client wants to do, while status codes like 200, 404, and 500 tell you what happened as a result. Together, these concepts form the foundation for everything that follows in API development.
