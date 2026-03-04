@@ -1,0 +1,148 @@
+Consuming Data from an API Using curl
+Here's a complete walkthrough of each instruction with expected outputs.
+
+1. Installing and Verifying curl
+Install curl (if not already installed):
+bash# Ubuntu/Debian
+sudo apt-get install curl
+
+# macOS (usually pre-installed, or via Homebrew)
+brew install curl
+
+# Check version
+curl --version
+```
+
+**Expected output:**
+```
+curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.11
+Release-Date: 2023-02-20
+Protocols: dict file ftp ftps gopher gophers http https imap imaps mqtt pop3 pop3s rtsp smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS brotli GSS-API HSTS HTTP2 HTTPS-proxy IDN IPv6 Kerberos Largefile libz NTLM NTLM_WB PSL SPNEGO SSL TLS-SRP UnixSockets zstd
+Fetch a basic webpage:
+bashcurl http://example.com
+Expected output:
+html<!doctype html>
+<html>
+<head>
+    <title>Example Domain</title>
+    ...
+</head>
+<body>
+    <h1>Example Domain</h1>
+    <p>This domain is for use in illustrative examples...</p>
+</body>
+</html>
+
+2. Fetching Data from the JSONPlaceholder API
+Fetch all posts:
+bashcurl https://jsonplaceholder.typicode.com/posts
+Expected output (truncated):
+json[
+  {
+    "userId": 1,
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+  },
+  {
+    "userId": 1,
+    "id": 2,
+    "title": "qui est esse",
+    "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"
+  },
+  ...
+]
+Fetch a single post (cleaner output):
+bashcurl https://jsonplaceholder.typicode.com/posts/1
+Expected output:
+json{
+  "userId": 1,
+  "id": 1,
+  "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+  "body": "quia et suscipit\nsuscipit recusandae consequuntur..."
+}
+Pretty-print JSON output using jq:
+bash# Install jq first
+sudo apt-get install jq
+
+# Pipe curl output through jq
+curl https://jsonplaceholder.typicode.com/posts/1 | jq '.'
+
+3. Using Headers and Other Options
+Fetch Only Headers (-I flag)
+bashcurl -I https://jsonplaceholder.typicode.com/posts
+```
+
+**Expected output:**
+```
+HTTP/2 200
+date: Wed, 18 Feb 2026 12:00:00 GMT
+content-type: application/json; charset=utf-8
+x-powered-by: Express
+x-ratelimit-limit: 1000
+x-ratelimit-remaining: 999
+x-ratelimit-reset: 1708257600
+vary: Origin, Accept-Encoding
+access-control-allow-credentials: true
+cache-control: max-age=43200
+pragma: no-cache
+expires: -1
+x-content-type-options: nosniff
+etag: W/"6b80-Ybsq/K6GwwqrYkAsFxqDXGC7DoM"
+via: 1.1 vegur
+cf-cache-status: HIT
+Make a POST Request (-X POST and -d flags)
+bashcurl -X POST \
+  -d "title=foo&body=bar&userId=1" \
+  https://jsonplaceholder.typicode.com/posts
+Expected output:
+json{
+  "title": "foo",
+  "body": "bar",
+  "userId": "1",
+  "id": 101
+}
+POST with JSON body and Content-Type header (more realistic/production-style):
+bashcurl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"title": "foo", "body": "bar", "userId": 1}' \
+  https://jsonplaceholder.typicode.com/posts
+Expected output:
+json{
+  "title": "foo",
+  "body": "bar",
+  "userId": 1,
+  "id": 101
+}
+Other Useful curl Flags
+bash# Verbose output - shows full request and response details including SSL handshake
+curl -v https://jsonplaceholder.typicode.com/posts/1
+
+# Follow redirects automatically
+curl -L http://jsonplaceholder.typicode.com/posts/1
+
+# Save output to a file
+curl -o posts.json https://jsonplaceholder.typicode.com/posts
+
+# Set a custom request header (e.g., for auth tokens)
+curl -H "Authorization: Bearer YOUR_TOKEN" https://jsonplaceholder.typicode.com/posts
+
+# Make a PUT request (full update)
+curl -X PUT \
+  -H "Content-Type: application/json" \
+  -d '{"id": 1, "title": "updated title", "body": "updated body", "userId": 1}' \
+  https://jsonplaceholder.typicode.com/posts/1
+
+# Make a PATCH request (partial update)
+curl -X PATCH \
+  -H "Content-Type: application/json" \
+  -d '{"title": "patched title"}' \
+  https://jsonplaceholder.typicode.com/posts/1
+
+# Make a DELETE request
+curl -X DELETE https://jsonplaceholder.typicode.com/posts/1
+
+Summary of Key curl Flags
+FlagPurposeExample--versionCheck installed curl versioncurl --version-IFetch headers onlycurl -I https://example.com-XSpecify HTTP methodcurl -X POST ...-dSend data in request bodycurl -d "key=value" ...-HSet a custom headercurl -H "Content-Type: application/json" ...-oSave output to filecurl -o file.json ...-LFollow redirectscurl -L http://example.com-vVerbose mode (debug)curl -v https://example.com-sSilent mode (no progress)curl -s https://example.com
+With curl you can simulate virtually any HTTP interaction from your terminal — making it an indispensable tool for API development, testing, and debugging.
